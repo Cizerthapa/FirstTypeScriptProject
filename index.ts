@@ -1,22 +1,18 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import routes from './src/routes/crmRoutes';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as routes from './src/routes/crmRoutes';
 
 const app = express();
-const PORT = 3000;
+const PORT: number = 3000;
 
 // mongoose connection
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://linkedintest:testdata12345@ds151232.mlab.com:51232/linkedin_test', {
-    useMongoClient: true
-});
+
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-routes(app);
+//routes(app);
 
 // serving static files
 app.use(express.static('public'));
