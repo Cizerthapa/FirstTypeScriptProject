@@ -1,11 +1,26 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as routes from './src/routes/crmRoutes';
+import * as pg from 'pg';
 
 const app = express();
-const PORT: number = 3000;
+const PORTEX: number = 3000;
+
+const client = new pg.Client({
+    host: 'localhost',
+    user: 'postgres',
+    port: 5432,
+    password: 'root',
+    database: 'postgres'
+});
 
 // mongoose connection
+client.connect((err) => {
+    if (err) {
+        console.error('Connection Error', err);
+        process.exit(1);
+    }
+    console.log('Connected to postgres');
+});
 
 
 // bodyparser setup
@@ -18,9 +33,9 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) =>
-    res.send(`Node and express server is running on port ${PORT}`)
+    res.send(`Node and express server is running on port ${PORTEX}`)
 );
 
-app.listen(PORT, () =>
-    console.log(`your server is running on port ${PORT}`)
+app.listen(PORTEX, () =>
+    console.log(`your server is running on port ${PORTEX}`)
 );
