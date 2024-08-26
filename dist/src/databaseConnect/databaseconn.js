@@ -1,19 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/databaseConnect/databaseconn
-const pg = require("pg");
-const client = new pg.Client({
+const sequelize_typescript_1 = require("sequelize-typescript");
+const dotenv = require("dotenv");
+const user_model_1 = require("../models/user.model");
+dotenv.config(); // Load environment variables from .env file
+// Set up Sequelize instance
+const sequelize = new sequelize_typescript_1.Sequelize({
+    dialect: 'postgres',
     host: 'localhost',
-    user: 'postgres',
-    port: 5432,
+    username: 'postgres',
     password: 'root',
-    database: 'postgres'
+    database: process.env.databasename,
+    models: [user_model_1.default], // Register your models here
 });
-client.connect((err) => {
-    if (err) {
-        console.error('Connection Error', err);
-        process.exit(1);
-    }
-    console.log('Connected to postgres');
+// Test the database connection
+sequelize.authenticate()
+    .then(() => {
+    console.log('Connected to PostgreSQL using Sequelize');
+})
+    .catch((err) => {
+    console.error('Connection Error', err);
+    process.exit(1);
 });
-exports.default = client;
+exports.default = sequelize;

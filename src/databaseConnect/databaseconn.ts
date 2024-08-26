@@ -1,19 +1,27 @@
-// src/databaseConnect/databaseconn
-import * as pg from 'pg';
+import { Sequelize } from 'sequelize-typescript';
+import * as dotenv from 'dotenv';
+import person from '../models/user.model';
 
-const client = new pg.Client({
+dotenv.config(); // Load environment variables from .env file
+
+// Set up Sequelize instance
+const sequelize = new Sequelize({
+    dialect: 'postgres',
     host: 'localhost',
-    user: 'postgres',
-    port: 5432,
+    username: 'postgres',
     password: 'root',
-    database: 'postgres'
+    database: process.env.databasename,
+    models: [person], // Register your models here
 });
 
-client.connect((err) => {
-    if (err) {
+// Test the database connection
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connected to PostgreSQL using Sequelize');
+    })
+    .catch((err) => {
         console.error('Connection Error', err);
         process.exit(1);
-    }
-    console.log('Connected to postgres');
-});
-export default client;
+    });
+
+export default sequelize;
